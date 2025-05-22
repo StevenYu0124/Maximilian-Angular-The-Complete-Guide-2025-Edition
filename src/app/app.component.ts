@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { UserComponent } from './user/user.component';
-import { DUMMY_USERS } from './dummy-users';
+import { DUMMY_USERS } from './user/dummy-users';
 import { User } from './user/user.model';
 import { TasksComponent } from "./tasks/tasks.component";
 
@@ -14,7 +14,7 @@ import { TasksComponent } from "./tasks/tasks.component";
 export class AppComponent {
   title = 'my-first-angular-app';
   users = DUMMY_USERS;
-  selectedUser: User | undefined;
+  selectedUser?: User;
 
   onSelectUser(user: User) {
     this.selectedUser = user;
