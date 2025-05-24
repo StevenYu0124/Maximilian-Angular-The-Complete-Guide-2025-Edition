@@ -1,9 +1,9 @@
-import { Component, computed, signal, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { User } from '../user/user.model';
 import { TaskComponent } from "./task/task.component";
-import { DUMMY_TASKS } from './dummy-tasks';
-import { type Task } from './task/task.model';
 import { AddTaskComponent } from './add-task/add-task.component';
+import { AddTask } from './add-task/add-task.model';
+import { TasksService } from './tasks.service';
 
 @Component({
   selector: 'app-tasks',
@@ -13,15 +13,21 @@ import { AddTaskComponent } from './add-task/add-task.component';
 })
 export class TasksComponent {
   user = input.required<User>();
-  tasks = signal<Task[]>(DUMMY_TASKS);
-  selectedUserTasks = computed(() =>
-    this.tasks().filter((task) => task.userId === this.user().id)
-  );
   displayAddTask = false;
 
-  onCompleteTask(taskId: string) {
-    const updatedTasks = this.tasks().filter(task => task.id !== taskId);
-    this.tasks.set(updatedTasks);
+  constructor(private tasksService: TasksService) { }
+
+  get selectedUserTasks() {
+    return this.tasksService.getTasksByUserId(this.user().id);
+  }
+
+  onCancelAddTask() {
+    this.displayAddTask = false;
+  }
+
+  onAddTask(addTask: AddTask) {
+    this.tasksService.addTask(addTask, this.user().id);
+    this.displayAddTask = false;
   }
 
   displayAddTaskForm() {
